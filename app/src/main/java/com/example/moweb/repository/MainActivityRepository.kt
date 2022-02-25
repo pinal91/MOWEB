@@ -1,5 +1,6 @@
 package com.example.moweb.repository
 
+import android.app.Dialog
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.example.moweb.model.CategoryResponse
@@ -43,13 +44,14 @@ object MainActivityRepository {
         return serviceProduct
     }
 
-    fun getProductListApiCall(cat_id:String): MutableLiveData<ProductitemResponse> {
+    fun getProductListApiCall(cat_id: String, progressDialog: Dialog?): MutableLiveData<ProductitemResponse> {
 
         val call = RetrofitClient.apiInterface.getProductList(cat_id)
 
         call.enqueue(object: Callback<ProductitemResponse> {
             override fun onFailure(call: Call<ProductitemResponse>, t: Throwable) {
                 // TODO("Not yet implemented")
+                hideProgressDialog(progressDialog)
             }
 
             override fun onResponse(
@@ -61,10 +63,18 @@ object MainActivityRepository {
                 response.body()?.let {
                     serviceProductList.postValue(it)
                 }
+                hideProgressDialog(progressDialog)
 
             }
         })
 
         return serviceProductList
+    }
+
+
+    private fun hideProgressDialog(progressDialog: Dialog?) {
+        if (progressDialog != null && progressDialog!!.isShowing) {
+            progressDialog!!.dismiss()
+        }
     }
 }

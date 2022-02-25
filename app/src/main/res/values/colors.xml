@@ -8,5 +8,6 @@
     <color name="black">#000000</color>
     <color name="secondary_text">#C1BEBE</color>
     <color name="red">#AE1212</color>
+    <color name="trans_white">#56FFFFFF</color>
 
 </resources>

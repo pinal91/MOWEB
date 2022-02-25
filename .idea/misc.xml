@@ -4,9 +4,11 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/PINAL PATEL/moweb/app/src/main/res/drawable/button_bg.xml" value="0.239" />
+        <entry key="..\:/PINAL PATEL/moweb/app/src/main/res/drawable/ic_nav_back_arrow.xml" value="0.239" />
         <entry key="..\:/PINAL PATEL/moweb/app/src/main/res/layout/activity_main.xml" value="0.36666666666666664" />
         <entry key="..\:/PINAL PATEL/moweb/app/src/main/res/layout/activity_product_list.xml" value="0.36666666666666664" />
         <entry key="..\:/PINAL PATEL/moweb/app/src/main/res/layout/category_product_items.xml" value="0.36666666666666664" />
+        <entry key="..\:/PINAL PATEL/moweb/app/src/main/res/layout/dialog_loading.xml" value="0.36666666666666664" />
         <entry key="..\:/PINAL PATEL/moweb/app/src/main/res/layout/product_list_item.xml" value="0.36666666666666664" />
       </map>
     </option>
