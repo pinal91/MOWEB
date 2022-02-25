@@ -8,7 +8,10 @@ import android.graphics.Color
 import android.graphics.PorterDuff
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.MenuItem
+import android.view.View
 import android.view.Window
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.lifecycle.ViewModelProvider
@@ -33,7 +36,7 @@ class ProductListActivity : DataBindingActivity() {
     private var cat_id: String = ""
     lateinit var addlisner: addItemClickListener
     private lateinit var productsDBHelper: DatabaseHelper
-
+    private var searchResult:MutableList<Items?>? = arrayListOf()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mBinding.apply {
@@ -41,8 +44,8 @@ class ProductListActivity : DataBindingActivity() {
         }
 
         context = this@ProductListActivity
-        displayProgressDialog(context as ProductListActivity)
         toolbarInitialize()
+
         productsDBHelper = DatabaseHelper(this)
         addlisner = object : addItemClickListener {
             override fun onaddClick(int: Int, item: Items, qnty: String) {
@@ -70,15 +73,16 @@ class ProductListActivity : DataBindingActivity() {
             }
         }
         cat_id = intent.getStringExtra("cat_id")!!
+        txtToolbar.text=intent.getStringExtra("name")
+
+        displayProgressDialog(context as ProductListActivity)
         var layoutManager: LinearLayoutManager? = null
         rcyProductList.setHasFixedSize(true)
         rcyProductList.itemAnimator
         layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         rcyProductList.layoutManager = layoutManager
-
-        mainActivityViewModel =
-            ViewModelProvider(this).get(ProductListActivityViewModel::class.java)
-
+        mainActivityViewModel = ViewModelProvider(this).get(ProductListActivityViewModel::class.java)
+        localSearch()
 
         mainActivityViewModel.servicesProductListData?.observe(this) {
             products!!.clear()
@@ -87,15 +91,40 @@ class ProductListActivity : DataBindingActivity() {
         }
 
 
-        adapterList = products?.let {
-            ProductListAdapter(it, this, addlisner)
-        }
+        adapterList = products?.let { ProductListAdapter(it, this, addlisner) }
         rcyProductList.adapter = adapterList
-
         mainActivityViewModel.getproductList(cat_id,progressDialog)
 
 
 
+    }
+
+    private fun localSearch() {
+        imgClose.setOnClickListener {
+            edtSearch.setText("")
+        }
+
+        edtSearch.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable) {}
+            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+                //on text change call ws and check data is available or not
+                try {
+                    adapterList?.filter!!.filter(s);
+
+                    if (s.isNotEmpty()) {
+                        //cross button will visible if there is text in box
+                        imgClose.visibility = View.VISIBLE
+                    } else {
+                        imgClose.visibility = View.GONE
+
+                    }
+                } catch (e: Exception) {
+                }
+            }
+        })
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")

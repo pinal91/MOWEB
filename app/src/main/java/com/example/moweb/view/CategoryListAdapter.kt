@@ -41,7 +41,8 @@ class CategoryListAdapter(
                     .load("http://3.208.241.167:4000/" + dataList[position]?.image_url)
                     .into(holder.itemView.imgProduct)
                 holder.itemView.relMain.setOnClickListener {
-                    context.startActivity(Intent(context,ProductListActivity::class.java).putExtra("cat_id", dataList[position]?._id))
+                    context.startActivity(Intent(context,ProductListActivity::class.java)
+                        .putExtra("cat_id", dataList[position]?._id).putExtra("name",dataList[position]!!.category))
                 }
 
             }
