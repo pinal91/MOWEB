@@ -1,11 +1,18 @@
 package com.example.moweb.repository
 
 import android.app.Dialog
+import android.content.Context
 import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.example.moweb.model.CategoryListItem
 import com.example.moweb.model.CategoryResponse
 import com.example.moweb.model.ProductitemResponse
 import com.example.moweb.retrofit.RetrofitClient
+import com.example.moweb.roomdb.DataBase
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -14,10 +21,39 @@ object MainActivityRepository {
 
     val serviceProduct = MutableLiveData<CategoryResponse>()
     val serviceProductList = MutableLiveData<ProductitemResponse>()
+    var dataBase: DataBase?=null
+    var catDataModel: LiveData<MutableList<CategoryListItem?>?>? = null
 
+    private fun initializeDB(context: Context): DataBase {
+        return DataBase.getDatabase(context)
+    }
 
+    fun insertData(context: Context, cat_Data: MutableList<CategoryListItem?>?) {
+        dataBase = initializeDB(context)
+
+        CoroutineScope(Dispatchers.IO).launch {
+            //val loginDetails = CategoryItemsData(cat_Data[])
+            dataBase!!.cat_dao()!!.insert(cat_Data)
+        }
+    }
+
+    fun getdata(context: Context):LiveData<MutableList<CategoryListItem?>?>? {
+        dataBase = initializeDB(context)
+        catDataModel = dataBase!!.cat_dao()?.getAllPostData()
+        return catDataModel
+    }
+
+    fun deleteData(context: Context) {
+        dataBase = initializeDB(context)
+
+        CoroutineScope(Dispatchers.IO).launch {
+            //val loginDetails = CategoryItemsData(cat_Data[])
+            dataBase!!.cat_dao()!!.DeleteAll()
+        }
+    }
 
     fun getProductApiCall(): MutableLiveData<CategoryResponse> {
+
 
         val call = RetrofitClient.apiInterface.getProduct()
 

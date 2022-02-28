@@ -1,6 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion 31
@@ -73,6 +74,12 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-runtime:2.4.1"
     implementation "androidx.lifecycle:lifecycle-common-java8:2.4.1"
     implementation 'com.github.JakeWharton:ViewPagerIndicator:2.4.1'
+    // - - Room Persistence Library
+    def room_version = "2.4.0-beta01"
+    implementation "androidx.room:room-runtime:$room_version"
+    kapt  "androidx.room:room-compiler:$room_version"
 
+    // optional - Kotlin Extensions and Coroutines support for Room
+    implementation "androidx.room:room-ktx:$room_version"
 
 }
