@@ -7,6 +7,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.moweb.model.CategoryListItem
 import com.example.moweb.model.CategoryResponse
+import com.example.moweb.model.Items
 import com.example.moweb.model.ProductitemResponse
 import com.example.moweb.retrofit.RetrofitClient
 import com.example.moweb.roomdb.DataBase
@@ -37,6 +38,15 @@ object MainActivityRepository {
         }
     }
 
+    fun insertProductData(context: Context, items_Data: MutableList<Items?>?) {
+        dataBase = initializeDB(context)
+
+        CoroutineScope(Dispatchers.IO).launch {
+            //val loginDetails = CategoryItemsData(cat_Data[])
+            dataBase!!.cat_dao()!!.insertItems(items_Data)
+        }
+    }
+
     fun getdata(context: Context):LiveData<MutableList<CategoryListItem?>?>? {
         dataBase = initializeDB(context)
         catDataModel = dataBase!!.cat_dao()?.getAllPostData()
@@ -49,6 +59,16 @@ object MainActivityRepository {
         CoroutineScope(Dispatchers.IO).launch {
             //val loginDetails = CategoryItemsData(cat_Data[])
             dataBase!!.cat_dao()!!.DeleteAll()
+        }
+    }
+
+    fun deleteProducts(context: Context, items: ArrayList<String?>?) {
+        dataBase = initializeDB(context)
+
+        CoroutineScope(Dispatchers.IO).launch {
+            //val loginDetails = CategoryItemsData(cat_Data[])
+            dataBase!!.cat_dao()!!.delete(items)
+           // dataBase!!.cat_dao()!!.deleteAllProduct()
         }
     }
 

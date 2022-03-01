@@ -1,12 +1,10 @@
 package com.example.moweb.roomdb
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import androidx.room.*
 import com.example.moweb.model.CategoryListItem
+import com.example.moweb.model.Items
+
 
 @Dao
 interface CatDao {
@@ -19,4 +17,13 @@ interface CatDao {
 
     @Query("SELECT * FROM cat_data ")
     fun getAllPostData(): LiveData<MutableList<CategoryListItem?>?>?
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertItems(postData: MutableList<Items?>?)
+
+    @Query("DELETE FROM items WHERE category_id IN (:category_id)")
+    fun delete(category_id: ArrayList<String?>?)
+
+    @Query("DELETE FROM items")
+    fun deleteAllProduct()
 }

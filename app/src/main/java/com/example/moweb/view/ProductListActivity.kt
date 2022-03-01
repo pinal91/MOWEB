@@ -36,7 +36,8 @@ class ProductListActivity : DataBindingActivity() {
     private var cat_id: String = ""
     lateinit var addlisner: addItemClickListener
     private lateinit var productsDBHelper: DatabaseHelper
-    private var searchResult:MutableList<Items?>? = arrayListOf()
+    private var ids:ArrayList<String?>? = arrayListOf()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mBinding.apply {
@@ -87,7 +88,13 @@ class ProductListActivity : DataBindingActivity() {
         mainActivityViewModel.servicesProductListData?.observe(this) {
             products!!.clear()
             products!!.addAll(it.response!!)
+            ids!!.clear()
+            for (i in 0 until products!!.size) {
+                ids!!.add(products!![i]?.category_id)
+            }
+            mainActivityViewModel.deleteProductList(context,ids)
             adapterList!!.notifyDataSetChanged()
+            mainActivityViewModel.insertProductData(this, products)
         }
 
 
